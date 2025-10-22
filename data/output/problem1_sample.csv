@@ -1,0 +1,11 @@
+log_entry,log_level
+17/06/08 13:33:59 INFO executor.Executor: Finished task 32.0 in stage 1.0 (TID 72). 2113 bytes result sent to driver,INFO
+"17/06/08 13:34:02 INFO python.PythonRunner: Times: total = 38, boot = 12, init = 26, finish = 0",INFO
+17/06/08 13:34:04 INFO executor.Executor: Running task 16.0 in stage 8.0 (TID 336),INFO
+17/06/08 13:34:08 INFO executor.Executor: Finished task 34.0 in stage 15.0 (TID 634). 2667 bytes result sent to driver,INFO
+"17/06/08 13:34:08 INFO python.PythonRunner: Times: total = 43, boot = 9, init = 34, finish = 0",INFO
+17/06/08 13:34:10 INFO executor.CoarseGrainedExecutorBackend: Got assigned task 767,INFO
+17/06/08 13:34:10 INFO executor.CoarseGrainedExecutorBackend: Got assigned task 790,INFO
+"17/06/08 13:34:11 INFO python.PythonRunner: Times: total = 37, boot = 18, init = 19, finish = 0",INFO
+17/06/08 13:34:18 INFO storage.BlockManager: Found block rdd_2_39 locally,INFO
+"17/06/08 13:34:20 INFO python.PythonRunner: Times: total = 39, boot = 18, init = 21, finish = 0",INFO
