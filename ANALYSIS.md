@@ -37,7 +37,7 @@ We found logs from **6 different computer clusters** running a total of **194 Sp
     * This chart visually represents the total number of Spark applications executed on each unique cluster identified in the dataset.
     * It clearly highlights the dominance of a single cluster, `1485248649253`, which ran 181 applications. The distribution is extremely uneven, with the next most active cluster (`1472621869829`) running only 8 applications, and the remaining four clusters running just 1 or 2 applications each, demonstrating a highly centralized workload during the periods logged.
 
-* **Density Plot (`problem2_density_plot.png`)**:
+* **Density Plot**:
 ![problem2 density plot](data/output/problem2_density_plot.png)
     * This density plot compares application durations across six clusters using a logarithmic scale. Each cluster shows a distinct pattern: while cluster 1485248649253has a concentration of jobs around 10³ seconds, others like 1472621869829are skewed toward shorter runs. A common long tail indicates that most jobs are short, but a minority run for significantly longer, revealing different workload profiles per cluster.
 
