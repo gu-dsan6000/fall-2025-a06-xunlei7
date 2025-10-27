@@ -13,7 +13,7 @@ def main(spark, spark_master, net_id):
         print("Running in local mode. Using sample data from 'data/sample/'")
         input_path = "data/sample/application_1485248649253_0052/*.log"
         
-        # --- Define LOCAL output paths ---
+        # Define LOCAL output paths 
         home_dir = os.path.expanduser("~")
         output_base = os.path.join(home_dir, "spark-cluster", "data", "output")
         os.makedirs(output_base, exist_ok=True)
@@ -27,7 +27,7 @@ def main(spark, spark_master, net_id):
         
         input_path = f"s3a://{net_id}-assignment-spark-cluster-logs/data/application_*/*.log"
         
-        # --- Define LOCAL MASTER output paths (to match professor's scp) ---
+        # Define LOCAL MASTER output paths (to match professor's scp) 
         home_dir = os.path.expanduser("~")
         output_base = os.path.join(home_dir, "spark-cluster") 
         os.makedirs(output_base, exist_ok=True) 
@@ -83,7 +83,7 @@ def main(spark, spark_master, net_id):
         print(f"Error saving '{counts_output_path}': {e}")
 
 
-    # 5. Generate Output 2: problem1_sample.csv
+    # Generate Output 2: problem1_sample.csv
     # (Generating 10 random samples)
     print(f"Generating '{sample_output_path}'...")
     try:
@@ -103,7 +103,7 @@ def main(spark, spark_master, net_id):
         print(f"Error saving '{sample_output_path}': {e}")
 
 
-    # 6. Generate Output 3: problem1_summary.txt
+    # Generate Output 3: problem1_summary.txt
     # (Generating summary text file)
     print(f"Generating '{summary_output_path}'...")
     try:
@@ -134,7 +134,7 @@ def main(spark, spark_master, net_id):
     except Exception as e:
         print(f"Error generating '{summary_output_path}': {e}")
 
-    # 7. Cleanup
+    # Cleanup
     valid_logs_df.unpersist()
     print("Analysis complete. Stopping Spark session.")
 

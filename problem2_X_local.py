@@ -33,7 +33,7 @@ def run_spark_analysis(spark, spark_master, net_id):
     print(f"Running Spark Analysis with Spark Master '{spark_master}'")
     print(f"Output directory: {output_base}")
 
-    # 1. Define Input Path
+    # Define Input Path
     # (Logic for switching between local sample and full S3 dataset)
     if "local" in spark_master:
         print("Running in local mode. Using sample data from 'data/sample/'")
@@ -42,7 +42,7 @@ def run_spark_analysis(spark, spark_master, net_id):
         print(f"Running in cluster mode. Using S3 data for NetID '{net_id}'")
         input_path = f"s3a://{net_id}-assignment-spark-cluster-logs/data/application_*/*.log"
 
-    # 2. Load and Parse Data
+    # Load and Parse Data
     try:
         logs_df = spark.read.text(input_path)
     except Exception as e:
@@ -53,7 +53,6 @@ def run_spark_analysis(spark, spark_master, net_id):
 
     print(f"Successfully loaded raw log data from {input_path}")
     
-    # (Extract timestamp string)
     logs_df = logs_df.withColumn(
         'timestamp_str', 
         regexp_extract(col('value'), r'^(\d{2}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})', 1)
@@ -82,7 +81,7 @@ def run_spark_analysis(spark, spark_master, net_id):
         regexp_extract(col('file_path'), r'application_(\d+)_(\d+)', 2)
     )
 
-    # 3. Calculate Application Timelines
+    # Calculate Application Timelines
     # (Get min/max timestamp for each application)
     app_times_df = logs_df.groupBy(
         'application_id', 'cluster_id', 'app_number'
@@ -201,39 +200,35 @@ def generate_visualizations(output_base):
     print(f"Generating '{DENSITY_PLOT_PNG}'...")
     
 
-    largest_cluster_id = summary_df.iloc[0]['cluster_id']
-    
-
+ 
     timeline_df['start_time'] = pd.to_datetime(timeline_df['start_time'])
     timeline_df['end_time'] = pd.to_datetime(timeline_df['end_time'])
     timeline_df['duration_sec'] = (
         timeline_df['end_time'] - timeline_df['start_time']
     ).dt.total_seconds()
     
-    largest_cluster_data = timeline_df[
-        timeline_df['cluster_id'] == largest_cluster_id
-    ]
-    
+    timeline_df = timeline_df[timeline_df['duration_sec'] > 0] 
 
-    sample_size = len(largest_cluster_data)
-    
-    plt.figure(figsize=(12, 7))
+    g = sns.displot(
+        data=timeline_df,
+        x='duration_sec',
+        col='cluster_id',
+        col_wrap=3,      
+        kind='hist',     
+        kde=True,        
+        log_scale=True,  
+        facet_kws=dict(sharey=False, sharex=True) 
+    )
 
-    sns.histplot(
-        data=largest_cluster_data, 
-        x='duration_sec', 
-        kde=True, 
-        log_scale=True 
-    )
-    
-    plt.title(
-        f'Job Duration Distribution for Largest Cluster {largest_cluster_id} (n={sample_size})'
-    )
-    plt.xlabel('Job Duration (seconds) - Log Scale')
-    plt.ylabel('Count / Density')
+    g.fig.suptitle('Job Duration Distribution per Cluster', y=1.03) 
+    g.set_axis_labels('Job Duration (seconds) - Log Scale', 'Count / Density')
+    g.set_titles("Cluster {col_name}") 
+
+
     plt.tight_layout()
     plt.savefig(DENSITY_PLOT_PNG)
-    plt.clf()
+    plt.clf() 
+
     
     print("Visualizations generated successfully.")
 
